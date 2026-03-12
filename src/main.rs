@@ -37,11 +37,7 @@ fn run_git(args: &[&str]) -> Result<String> {
         Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
-        Err(anyhow::anyhow!(
-            "git {} failed: {}",
-            args.join(" "),
-            stderr
-        ))
+        Err(anyhow::anyhow!("git {} failed: {}", args.join(" "), stderr))
     }
 }
 
@@ -55,11 +51,7 @@ fn run_gh(args: &[&str]) -> Result<String> {
         Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
-        Err(anyhow::anyhow!(
-            "gh {} failed: {}",
-            args.join(" "),
-            stderr
-        ))
+        Err(anyhow::anyhow!("gh {} failed: {}", args.join(" "), stderr))
     }
 }
 
@@ -69,9 +61,7 @@ fn cmd_start(branch_name: &str) -> Result<()> {
     run_git(&["checkout", "master"])
         .or_else(|err| {
             let msg = err.to_string();
-            if msg.contains("did not match any file")
-                || msg.contains("unknown revision or path")
-            {
+            if msg.contains("did not match any file") || msg.contains("unknown revision or path") {
                 run_git(&["checkout", "main"])
             } else {
                 Err(err)
@@ -101,9 +91,12 @@ fn cmd_finish(pr_title: &str) -> Result<()> {
     );
     run_git(&["add", "."]).context("Failed to stage changes")?;
 
-    println!("{} {}", "Committing with message:".cyan(), pr_title.yellow());
-    run_git(&["commit", "-m", pr_title])
-        .context("Failed to commit changes")?;
+    println!(
+        "{} {}",
+        "Committing with message:".cyan(),
+        pr_title.yellow()
+    );
+    run_git(&["commit", "-m", pr_title]).context("Failed to commit changes")?;
 
     // Determine current branch name
     let branch = run_git(&["rev-parse", "--abbrev-ref", "HEAD"])
@@ -163,8 +156,7 @@ mod tests {
 
     #[test]
     fn verify_cli_parse_finish() {
-        let cli =
-            Cli::try_parse_from(["git-workflow", "finish", "Add awesome feature"]).unwrap();
+        let cli = Cli::try_parse_from(["git-workflow", "finish", "Add awesome feature"]).unwrap();
         match cli.command {
             Commands::Finish { pr_title } => assert_eq!(pr_title, "Add awesome feature"),
             _ => panic!("Expected Finish command"),
