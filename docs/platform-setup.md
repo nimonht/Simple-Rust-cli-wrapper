@@ -225,7 +225,7 @@ sudo cp /tmp/git-workflow-src/packaging/gentoo/dev-vcs/git-workflow/* \
 
 # Generate the manifest
 cd /var/db/repos/local/dev-vcs/git-workflow
-sudo ebuild git-workflow-1.0.0.ebuild manifest
+sudo ebuild git-workflow-1.0.0-rc1.ebuild manifest
 
 # Install
 sudo emerge --ask dev-vcs/git-workflow
