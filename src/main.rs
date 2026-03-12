@@ -64,10 +64,20 @@ fn run_gh(args: &[&str]) -> Result<String> {
 }
 
 fn cmd_start(branch_name: &str) -> Result<()> {
-    println!("{}", "Syncing master branch...".cyan());
+    println!("{}", "Syncing default branch...".cyan());
 
-    run_git(&["checkout", "master"]).or_else(|_| run_git(&["checkout", "main"]))
-        .context("Failed to switch to master/main branch")?;
+    run_git(&["checkout", "master"])
+        .or_else(|err| {
+            let msg = err.to_string();
+            if msg.contains("did not match any file")
+                || msg.contains("unknown revision or path")
+            {
+                run_git(&["checkout", "main"])
+            } else {
+                Err(err)
+            }
+        })
+        .context("Failed to switch to default branch (master/main)")?;
 
     run_git(&["pull"]).context("Failed to pull latest changes")?;
 
@@ -77,7 +87,7 @@ fn cmd_start(branch_name: &str) -> Result<()> {
 
     println!(
         "{} {}",
-        "✔ Branch created and ready:".green().bold(),
+        "[OK] Branch created and ready:".green().bold(),
         branch_name.yellow().bold()
     );
     Ok(())
@@ -99,6 +109,14 @@ fn cmd_finish(pr_title: &str) -> Result<()> {
     let branch = run_git(&["rev-parse", "--abbrev-ref", "HEAD"])
         .context("Failed to determine current branch")?;
 
+    if branch.is_empty() || branch == "HEAD" {
+        return Err(anyhow::anyhow!(
+            "Cannot determine a valid current branch (got '{}'). \
+You may be in a detached HEAD state. Please checkout a branch and rerun this command.",
+            branch
+        ));
+    }
+
     println!("{} {}", "Pushing branch:".cyan(), branch.yellow());
     run_git(&["push", "--set-upstream", "origin", &branch])
         .with_context(|| format!("Failed to push branch '{branch}'"))?;
@@ -109,7 +127,7 @@ fn cmd_finish(pr_title: &str) -> Result<()> {
 
     println!(
         "{} {}",
-        "✔ Pull Request created:".green().bold(),
+        "[OK] Pull Request created:".green().bold(),
         pr_url.yellow().bold()
     );
     Ok(())
@@ -124,7 +142,7 @@ fn main() {
     };
 
     if let Err(err) = result {
-        eprintln!("{} {err:#}", "✘ Error:".red().bold());
+        eprintln!("{} {err:#}", "[ERROR]".red().bold());
         std::process::exit(1);
     }
 }
