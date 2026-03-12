@@ -8,10 +8,10 @@ pkgs.rustPlatform.buildRustPackage rec {
     owner = "nimonht";
     repo = "Simple-Rust-cli-wrapper";
     rev = "v${version}";
-    hash = ""; # Replace with actual hash after first build
+    hash = pkgs.lib.fakeHash; # Replace with actual hash after first build
   };
 
-  cargoHash = ""; # Replace with actual hash after first build
+  cargoHash = pkgs.lib.fakeHash; # Replace with actual hash after first build
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
 

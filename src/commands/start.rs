@@ -3,12 +3,11 @@ use colored::Colorize;
 
 use crate::git::{detect_default_branch, run_git};
 
-/// Sync the default branch (master or main) and create a new feature branch.
+/// Sync the default branch and create a new feature branch.
 pub fn cmd_start(branch_name: &str) -> Result<()> {
     println!("{}", "Syncing default branch...".cyan());
 
-    let default_branch =
-        detect_default_branch().context("Failed to detect default branch (master/main)")?;
+    let default_branch = detect_default_branch().context("Failed to detect default branch")?;
 
     run_git(&["checkout", &default_branch])
         .with_context(|| format!("Failed to switch to default branch '{default_branch}'"))?;

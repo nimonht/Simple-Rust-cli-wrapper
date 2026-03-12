@@ -24,7 +24,7 @@
             owner = "nimonht";
             repo = "Simple-Rust-cli-wrapper";
             rev = "v${version}";
-            hash = ""; # Replace with actual hash after first build
+            hash = pkgs.lib.fakeHash; # Replace with actual hash after first build
           };
 
           # Replace with actual hash after first build
