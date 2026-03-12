@@ -36,12 +36,12 @@ enum Commands {
         #[arg(short, long)]
         branch: Option<String>,
 
-        /// Specific commit SHA to dump (e.g. abc1234 or HEAD~3..HEAD)
-        #[arg(short, long)]
+        /// Specific commit SHA to dump (single commit only)
+        #[arg(short, long, required_unless_present = "all", conflicts_with = "all")]
         commit: Option<String>,
 
         /// Dump all commits unique to the branch compared to the default branch
-        #[arg(short, long, default_value_t = false)]
+        #[arg(short, long, conflicts_with = "commit")]
         all: bool,
 
         /// Output format: patch or diff
@@ -52,7 +52,7 @@ enum Commands {
         #[arg(short, long, default_value = ".")]
         output: String,
 
-        /// Send patches via git send-email to this address
+        /// Send patches via git send-email to this address (requires --format patch)
         #[arg(short, long)]
         email: Option<String>,
     },
@@ -131,26 +131,10 @@ mod tests {
     }
 
     #[test]
-    fn verify_cli_parse_dump_defaults() {
-        let cli = Cli::try_parse_from(["git-workflow", "dump"]).unwrap();
-        match cli.command {
-            Commands::Dump {
-                branch,
-                commit,
-                all,
-                format,
-                output,
-                email,
-            } => {
-                assert!(branch.is_none());
-                assert!(commit.is_none());
-                assert!(!all);
-                assert_eq!(format, "patch");
-                assert_eq!(output, ".");
-                assert!(email.is_none());
-            }
-            _ => panic!("Expected Dump command"),
-        }
+    fn verify_cli_parse_dump_requires_target() {
+        // Must provide --commit or --all
+        let result = Cli::try_parse_from(["git-workflow", "dump"]);
+        assert!(result.is_err());
     }
 
     #[test]
@@ -166,8 +150,6 @@ mod tests {
             "diff",
             "--output",
             "/tmp/patches",
-            "--email",
-            "dev@example.com",
         ])
         .unwrap();
         match cli.command {
@@ -184,7 +166,7 @@ mod tests {
                 assert!(!all);
                 assert_eq!(format, "diff");
                 assert_eq!(output, "/tmp/patches");
-                assert_eq!(email.unwrap(), "dev@example.com");
+                assert!(email.is_none());
             }
             _ => panic!("Expected Dump command"),
         }
@@ -194,9 +176,18 @@ mod tests {
     fn verify_cli_parse_dump_all_flag() {
         let cli = Cli::try_parse_from(["git-workflow", "dump", "--all"]).unwrap();
         match cli.command {
-            Commands::Dump { all, .. } => assert!(all),
+            Commands::Dump { all, commit, .. } => {
+                assert!(all);
+                assert!(commit.is_none());
+            }
             _ => panic!("Expected Dump command"),
         }
+    }
+
+    #[test]
+    fn verify_cli_dump_commit_and_all_conflict() {
+        let result = Cli::try_parse_from(["git-workflow", "dump", "--commit", "abc123", "--all"]);
+        assert!(result.is_err());
     }
 
     #[test]

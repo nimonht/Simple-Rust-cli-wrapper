@@ -128,7 +128,7 @@ fn draw_dump_screen(frame: &mut Frame, app: &App, area: Rect) {
             DumpField::Branch,
         ),
         dump_field_line(
-            "Commit SHA (empty = range):",
+            "Commit SHA (optional):",
             &app.dump_commit,
             &app.dump_field,
             DumpField::Commit,

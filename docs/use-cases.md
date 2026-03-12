@@ -100,14 +100,15 @@ git-workflow dump --branch feature/driver-update --format patch --email maintain
 
 ## 6. Using the interactive TUI
 
-Launch the terminal UI for a visual overview of branches, status, and logs:
+Launch the terminal UI for an interactive menu-driven interface:
 
 ```bash
 git-workflow tui
 ```
 
 The TUI uses a lazydocker-style layout and respects your terminal's color theme.
-Use keyboard navigation to browse branches, view diffs, and trigger actions.
+Use keyboard navigation to select commands (Start Branch, Finish PR, Dump
+Commits), fill in parameters, and execute actions.
 
 ## 7. Handling errors
 

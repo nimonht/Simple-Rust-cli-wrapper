@@ -12,6 +12,25 @@ pub fn cmd_dump(
     output: &str,
     email: Option<&str>,
 ) -> Result<()> {
+    if format != "patch" && format != "diff" {
+        return Err(anyhow::anyhow!(
+            "Invalid format '{}'. Use 'patch' or 'diff'.",
+            format
+        ));
+    }
+
+    if email.is_some() && format != "patch" {
+        return Err(anyhow::anyhow!(
+            "--email can only be used with 'patch' format. Use --format patch."
+        ));
+    }
+
+    if email.is_some() && output == "." {
+        return Err(anyhow::anyhow!(
+            "--email requires an explicit --output directory to avoid sending unintended files."
+        ));
+    }
+
     let target_branch = match branch {
         Some(b) => b.to_string(),
         None => run_git(&["rev-parse", "--abbrev-ref", "HEAD"])
@@ -24,20 +43,17 @@ pub fn cmd_dump(
         target_branch.yellow()
     );
 
-    if format != "patch" && format != "diff" {
-        return Err(anyhow::anyhow!(
-            "Invalid format '{}'. Use 'patch' or 'diff'.",
-            format
-        ));
-    }
-
     std::fs::create_dir_all(output)
         .with_context(|| format!("Failed to create output directory '{output}'"))?;
 
+    let mut patch_files: Vec<String> = Vec::new();
+
     if let Some(sha) = commit {
-        dump_specific_commit(sha, format, output)?;
+        let files = dump_specific_commit(sha, format, output)?;
+        patch_files.extend(files);
     } else if all {
-        dump_all_commits(&target_branch, format, output)?;
+        let files = dump_all_commits(&target_branch, format, output)?;
+        patch_files.extend(files);
     } else {
         return Err(anyhow::anyhow!(
             "Specify --commit <SHA> to dump a single commit, or --all to dump all branch commits."
@@ -45,18 +61,25 @@ pub fn cmd_dump(
     }
 
     if let Some(addr) = email {
-        send_patches(output, addr)?;
+        send_patches(&patch_files, addr)?;
     }
 
     Ok(())
 }
 
-fn dump_specific_commit(sha: &str, format: &str, output: &str) -> Result<()> {
+fn dump_specific_commit(sha: &str, format: &str, output: &str) -> Result<Vec<String>> {
+    let mut files = Vec::new();
     match format {
         "patch" => {
             println!("{} {}", "Generating patch for commit:".cyan(), sha.yellow());
             let result = run_git(&["format-patch", "-1", sha, "-o", output])
                 .with_context(|| format!("Failed to generate patch for commit '{sha}'"))?;
+            for line in result.lines() {
+                let path = line.trim().to_string();
+                if !path.is_empty() {
+                    files.push(path);
+                }
+            }
             println!(
                 "{} {}",
                 "[OK] Patch written:".green().bold(),
@@ -79,11 +102,12 @@ fn dump_specific_commit(sha: &str, format: &str, output: &str) -> Result<()> {
         }
         _ => unreachable!(),
     }
-    Ok(())
+    Ok(files)
 }
 
-fn dump_all_commits(branch: &str, format: &str, output: &str) -> Result<()> {
+fn dump_all_commits(branch: &str, format: &str, output: &str) -> Result<Vec<String>> {
     let default_branch = detect_default_branch()?;
+    let mut files = Vec::new();
 
     match format {
         "patch" => {
@@ -100,7 +124,11 @@ fn dump_all_commits(branch: &str, format: &str, output: &str) -> Result<()> {
                 );
             } else {
                 for line in result.lines() {
-                    println!("  {}", line);
+                    let path = line.trim().to_string();
+                    if !path.is_empty() {
+                        println!("  {}", path);
+                        files.push(path);
+                    }
                 }
                 println!("{}", "[OK] All patches generated.".green().bold());
             }
@@ -130,17 +158,25 @@ fn dump_all_commits(branch: &str, format: &str, output: &str) -> Result<()> {
         }
         _ => unreachable!(),
     }
-    Ok(())
+    Ok(files)
 }
 
-fn send_patches(output: &str, email: &str) -> Result<()> {
+fn send_patches(patch_files: &[String], email: &str) -> Result<()> {
     println!(
         "{} {}",
         "Sending patches via git send-email to:".cyan(),
         email.yellow()
     );
 
-    run_git(&["send-email", "--to", email, output])
+    if patch_files.is_empty() {
+        return Err(anyhow::anyhow!("No patch files were generated to send."));
+    }
+
+    let mut args = vec!["send-email", "--to", email];
+    let refs: Vec<&str> = patch_files.iter().map(|s| s.as_str()).collect();
+    args.extend(refs);
+
+    run_git(&args)
         .context("Failed to send patches via git send-email. Is git-send-email installed?")?;
 
     println!("{}", "[OK] Patches sent successfully.".green().bold());

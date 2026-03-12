@@ -73,7 +73,7 @@ impl App {
             should_quit: false,
             dump_branch: String::new(),
             dump_commit: String::new(),
-            dump_all: true,
+            dump_all: false,
             dump_format: 0,
             dump_output: ".".to_string(),
             dump_email: String::new(),
@@ -96,7 +96,7 @@ impl App {
     pub fn reset_dump(&mut self) {
         self.dump_branch.clear();
         self.dump_commit.clear();
-        self.dump_all = true;
+        self.dump_all = false;
         self.dump_format = 0;
         self.dump_output = ".".to_string();
         self.dump_email.clear();
