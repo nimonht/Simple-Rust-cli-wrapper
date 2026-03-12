@@ -11,7 +11,7 @@ four subcommands:
 - `start <branch-name>` -- sync the default branch and create a new feature branch.
 - `finish <pr-title>` -- stage all changes, commit, push, and open a Pull Request via GitHub CLI (`gh`).
 - `dump [OPTIONS]` -- dump commits from a branch to patch or diff files (for kernel dev workflows). Options: `--branch`, `--commit`, `--all`, `--format` (patch/diff), `--output`, `--email`.
-- `tui` -- launch interactive TUI mode (lazydocker-style, respects terminal theme).
+- `tui` -- launch interactive TUI mode (respects terminal theme).
 
 ## Build and Test
 
@@ -67,10 +67,10 @@ every file that contains a hardcoded version string (packaging files, docs,
 lockfile, Gentoo ebuild filename):
 
 ```bash
-./scripts/set-version.sh 0.3.0   # bump to 0.3.0
+./scripts/set-version.sh x.x.x   # bump to x.x.x
 cargo test && cargo clippy -- -D warnings
-git add -A && git commit -m "Bump version to 0.3.0"
-git tag v0.3.0 && git push origin v0.3.0
+git add -A && git commit -m "Bump version to x.x.x"
+git tag vx.x.x && git push origin vx.x.x
 ```
 
 Never edit version strings by hand -- always use the script.

@@ -11,6 +11,15 @@ A Rust CLI tool that automates Git workflows.
 | `git-workflow dump [OPTIONS]` | Dump commits from a branch to patch or diff files |
 | `git-workflow tui` | Launch interactive TUI mode |
 
+
+> [!WARNING]
+> **EXPERIMENTAL SOFTWARE**
+> This scheduler is experimental and intended for use with no guarantees. It may contain bugs and is not recommended for production use. Use at your own risk.
+
+> [!NOTE]
+> **AI TRANSPARENCY**
+> Large Language Models were used for optimization pattern matching and design exploration. All implementation details have been human-verified and tested. See [AGENT.md](AGENT.md) for more information.
+
 ## Quick Start
 
 See [docs/installation-manual.md](docs/installation-manual.md) for full
@@ -51,38 +60,6 @@ git-workflow tui
 - [Code rules](.github/code-rules.md) -- coding conventions for contributors
 - [Contributing guide](CONTRIBUTING.md) -- how to contribute to the project
 - [Code of Conduct](CODE_OF_CONDUCT.md) -- community standards and expectations
-
-## Development
-
-```bash
-cargo build          # compile
-cargo test           # run tests
-cargo clippy         # lint
-cargo fmt --all      # format
-```
-
-## CI/CD
-
-- **CI** (`.github/workflows/ci.yml`) -- runs check, test, clippy, and fmt on
-  every push and pull request. Also builds release binaries for Linux, macOS,
-  and Windows.
-- **Release** (`.github/workflows/release.yml`) -- when a tag matching `v*` is
-  pushed, builds release archives for all platforms and creates a GitHub Release
-  with the artifacts attached.
-
-To cut a release, use the version bump script to update all version strings
-across the project in one step:
-
-```bash
-./scripts/set-version.sh 0.3.0
-cargo test && cargo clippy -- -D warnings
-git add -A && git commit -m "Bump version to 0.3.0"
-git tag v0.3.0
-git push origin v0.3.0
-```
-
-Never edit version strings by hand -- the script updates `Cargo.toml`,
-`Cargo.lock`, all packaging files, and documentation automatically.
 
 ## License
 

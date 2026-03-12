@@ -32,6 +32,10 @@ git-workflow --version
 
 ### Package manager installation
 
+> [!WARNING]
+> **ANVAILABILITY**
+> We do not yet have official packages published to Linux distribution repositories. The packaging files in this directory are community-maintained and may be out of date. Use at your own risk.
+
 Community-maintained packaging files are provided in the `packaging/` directory
 for several distributions. These are not yet published to official repositories
 -- see each section below for instructions on building and installing locally.
@@ -89,7 +93,7 @@ Build from source or use the release binary (see above).
 
 ---
 
-### Arch Linux / Manjaro
+### Arch Linux 
 
 #### Prerequisites
 
@@ -221,7 +225,7 @@ sudo cp /tmp/git-workflow-src/packaging/gentoo/dev-vcs/git-workflow/* \
 
 # Generate the manifest
 cd /var/db/repos/local/dev-vcs/git-workflow
-sudo ebuild git-workflow-0.2.0.ebuild manifest
+sudo ebuild git-workflow-1.0.0.ebuild manifest
 
 # Install
 sudo emerge --ask dev-vcs/git-workflow

@@ -40,6 +40,10 @@ For platform-specific download and extraction steps, see
 
 ## Install via package manager (Linux)
 
+> [!WARNING]
+> **ANVAILABILITY**
+> We do not yet have official packages published to Linux distribution repositories. The packaging files in this directory are community-maintained and may be out of date. Use at your own risk.
+
 Community-maintained packaging files are provided in the `packaging/` directory
 for several Linux distributions. These are not yet published to official
 repositories -- you can build and install locally from the packaging files.
