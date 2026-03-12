@@ -7,9 +7,18 @@ A Rust CLI tool that automates Git workflows.
 | Command | Description |
 |---------|-------------|
 | `git-workflow start <branch-name>` | Sync the default branch and create a new feature branch |
-| `git-workflow finish <pr-title>` | Stage, commit, push, and open a Pull Request |
+| `git-workflow finish <pr-title>` | Stages changes, commits, pushes to the remote repository, and opens a Pull Request. **Important: This requires that you are authenticated to push to the remote repository (via SSH or HTTPS) and that GitHub CLI (`gh`) is installed and logged in.** |
 | `git-workflow dump [OPTIONS]` | Dump commits from a branch to patch or diff files |
 | `git-workflow tui` | Launch interactive TUI mode |
+
+
+> [!WARNING]
+> **EXPERIMENTAL SOFTWARE**
+> This CLI is experimental and intended for use with no guarantees. It may contain bugs and is not recommended for production use. Use at your own risk.
+
+> [!NOTE]
+> **AI TRANSPARENCY**
+> Large Language Models were used for optimization pattern matching and design exploration. All implementation details have been human-verified and tested. See [AGENT.md](AGENT.md) for more information.
 
 ## Quick Start
 
@@ -49,31 +58,8 @@ git-workflow tui
   macOS, Windows, and BSD
 - [Use case examples](docs/use-cases.md) -- common workflows illustrated
 - [Code rules](.github/code-rules.md) -- coding conventions for contributors
-
-## Development
-
-```bash
-cargo build          # compile
-cargo test           # run tests
-cargo clippy         # lint
-cargo fmt --all      # format
-```
-
-## CI/CD
-
-- **CI** (`.github/workflows/ci.yml`) -- runs check, test, clippy, and fmt on
-  every push and pull request. Also builds release binaries for Linux, macOS,
-  and Windows.
-- **Release** (`.github/workflows/release.yml`) -- when a tag matching `v*` is
-  pushed, builds release archives for all platforms and creates a GitHub Release
-  with the artifacts attached.
-
-To cut a release:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
+- [Contributing guide](CONTRIBUTING.md) -- how to contribute to the project
+- [Code of Conduct](CODE_OF_CONDUCT.md) -- community standards and expectations
 
 ## License
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <name>nimonht</name>
+  </maintainer>
+  <longdescription>
+    git-workflow is a CLI tool that automates common Git workflows.
+    It provides commands to start feature branches, finish work and open
+    Pull Requests, dump commits as patches, and an interactive TUI mode.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">nimonht/Simple-Rust-cli-wrapper</remote-id>
+  </upstream>
+</pkgmetadata>

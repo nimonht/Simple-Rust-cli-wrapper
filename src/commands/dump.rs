@@ -94,6 +94,7 @@ fn dump_specific_commit(sha: &str, format: &str, output: &str) -> Result<Vec<Str
             let diff_path = format!("{}/{}.diff", output, short_sha);
             std::fs::write(&diff_path, &diff)
                 .with_context(|| format!("Failed to write diff to '{diff_path}'"))?;
+            files.push(diff_path.clone());
             println!(
                 "{} {}",
                 "[OK] Diff written to:".green().bold(),
@@ -167,17 +168,21 @@ fn send_patches(patch_files: &[String], email: &str) -> Result<()> {
         "Sending patches via git send-email to:".cyan(),
         email.yellow()
     );
+    println!(
+        "{}",
+        "  Note: git send-email must be configured with SMTP settings in your .gitconfig.".yellow()
+    );
 
     if patch_files.is_empty() {
         return Err(anyhow::anyhow!("No patch files were generated to send."));
     }
 
-    let mut args = vec!["send-email", "--to", email];
+    let mut args = vec!["send-email", "--to", email, "--confirm=auto"];
     let refs: Vec<&str> = patch_files.iter().map(|s| s.as_str()).collect();
     args.extend(refs);
 
     run_git(&args)
-        .context("Failed to send patches via git send-email. Is git-send-email installed?")?;
+        .context("Failed to send patches via git send-email. Is git-send-email installed and configured with SMTP?")?;
 
     println!("{}", "[OK] Patches sent successfully.".green().bold());
     Ok(())

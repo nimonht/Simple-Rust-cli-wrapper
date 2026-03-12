@@ -3,6 +3,7 @@ use colored::Colorize;
 
 use crate::git::{run_gh, run_git};
 
+/// Stage all changes, commit, push, and open a Pull Request via GitHub CLI.
 pub fn cmd_finish(pr_title: &str) -> Result<()> {
     println!("{}", "Staging all changes (git add .)...".cyan());
     println!(

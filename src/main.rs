@@ -16,7 +16,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Sync master and start a new feature branch
+    /// Sync the default branch and start a new feature branch
     Start {
         /// Name of the new branch to create
         branch_name: String,

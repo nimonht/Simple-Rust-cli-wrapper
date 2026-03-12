@@ -38,6 +38,64 @@ extract it, and move the binary to a directory in your `PATH`.
 For platform-specific download and extraction steps, see
 [platform-setup.md](platform-setup.md).
 
+## Install via package manager (Linux)
+
+> [!WARNING]
+> **AVAILABILITY**
+> We do not yet have official packages published to Linux distribution repositories. The packaging files in this directory are community-maintained and may be out of date. Use at your own risk.
+
+Community-maintained packaging files are provided in the `packaging/` directory
+for several Linux distributions. These are not yet published to official
+repositories -- you can build and install locally from the packaging files.
+
+### Arch Linux (AUR)
+
+A PKGBUILD is provided in `packaging/aur/`. Install with an AUR helper or
+build manually:
+
+```bash
+# Using yay (if published to AUR)
+yay -S git-workflow
+
+# Using paru (if published to AUR)
+paru -S git-workflow
+
+# Build from the PKGBUILD manually
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper/packaging/aur
+makepkg -si
+```
+
+### Gentoo (ebuild)
+
+An ebuild is provided in `packaging/gentoo/`. See
+[platform-setup.md](platform-setup.md#gentoo) for instructions on setting up a
+local overlay and installing via `emerge`.
+
+### NixOS / Nix (flake)
+
+A Nix flake is provided in `packaging/nix/`:
+
+```bash
+# Run directly without installing
+nix run github:nimonht/Simple-Rust-cli-wrapper
+
+# Install to your profile
+nix profile install github:nimonht/Simple-Rust-cli-wrapper
+```
+
+For non-flake users, a `default.nix` is also provided:
+
+```bash
+cd Simple-Rust-cli-wrapper/packaging/nix
+nix-build
+./result/bin/git-workflow --version
+```
+
+For full per-distro prerequisites and setup instructions (Debian, Fedora, Arch,
+openSUSE, Void, Alpine, Gentoo, NixOS, and more), see
+[platform-setup.md](platform-setup.md).
+
 ## Verify the installation
 
 ```bash
