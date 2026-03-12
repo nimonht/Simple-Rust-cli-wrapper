@@ -1,6 +1,6 @@
 # git-workflow
 
-A Rust CLI tool that automates common Git workflows for teams.
+A Rust CLI tool that automates Git workflows.
 
 ## Commands
 
@@ -8,13 +8,15 @@ A Rust CLI tool that automates common Git workflows for teams.
 |---------|-------------|
 | `git-workflow start <branch-name>` | Sync the default branch and create a new feature branch |
 | `git-workflow finish <pr-title>` | Stage, commit, push, and open a Pull Request |
+| `git-workflow dump [OPTIONS]` | Dump commits from a branch to patch or diff files |
+| `git-workflow tui` | Launch interactive TUI mode |
 
 ## Quick Start
 
-```bash
-# Install from source
-cargo install --path .
+See [docs/installation-manual.md](docs/installation-manual.md) for full
+installation instructions.
 
+```bash
 # Start a feature branch
 git-workflow start feature/my-feature
 
@@ -22,37 +24,27 @@ git-workflow start feature/my-feature
 
 # Commit, push, and open a PR
 git-workflow finish "Add my feature"
+
+# Dump patches from a branch
+git-workflow dump --branch feature/my-feature --format patch --output ./patches
+
+# Send patches via email
+git-workflow dump --branch feature/my-feature --format patch --email maintainer@example.com
+
+# Launch the interactive TUI
+git-workflow tui
 ```
 
 ## Prerequisites
 
-- [Rust](https://rustup.rs) (cargo)
+- [Rust](https://rustup.rs) (cargo) -- only needed when building from source
 - [Git](https://git-scm.com/downloads)
 - [GitHub CLI](https://cli.github.com) (`gh`) -- installed and authenticated
 
-## Installation
-
-### From source
-
-```bash
-git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
-cd Simple-Rust-cli-wrapper
-cargo install --path .
-```
-
-### From release binaries
-
-Download a pre-built binary from the
-[Releases](https://github.com/nimonht/Simple-Rust-cli-wrapper/releases) page
-and place it somewhere in your `PATH`.
-
-See [docs/platform-setup.md](docs/platform-setup.md) for detailed instructions
-for Linux, macOS, Windows, and BSD.
-
 ## Documentation
 
-- [Setup guide](docs/setup.md) -- prerequisites, installation, and
-  authentication
+- [Installation manual](docs/installation-manual.md) -- prerequisites,
+  installation, and authentication
 - [Platform setup tutorial](docs/platform-setup.md) -- step-by-step for Linux,
   macOS, Windows, and BSD
 - [Use case examples](docs/use-cases.md) -- common workflows illustrated

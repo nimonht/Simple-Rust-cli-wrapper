@@ -1,4 +1,8 @@
-# Setup Guide
+# Installation Manual
+
+This is the authoritative installation guide for `git-workflow`. For
+platform-specific details (distro packages, Homebrew, winget, BSD), see
+[platform-setup.md](platform-setup.md).
 
 ## Prerequisites
 
@@ -10,6 +14,9 @@ installed:
 | **Rust** (cargo) | Build the CLI from source | https://rustup.rs |
 | **Git** | Version control | https://git-scm.com/downloads |
 | **GitHub CLI** (gh) | Create Pull Requests from the terminal | https://cli.github.com |
+
+Rust is only required when building from source. If you install from a
+pre-built release binary, you only need Git and GitHub CLI.
 
 ## Install from source
 
@@ -28,22 +35,8 @@ Download the archive for your platform from the
 [Releases](https://github.com/nimonht/Simple-Rust-cli-wrapper/releases) page,
 extract it, and move the binary to a directory in your `PATH`.
 
-### Linux / macOS
-
-```bash
-# Intel Mac:
-tar xzf git-workflow-linux-amd64.tar.gz
-# macOS (see docs/platform-setup.md for Intel vs Apple Silicon):
-# tar xzf git-workflow-macos-amd64.tar.gz
-# tar xzf git-workflow-macos-arm64.tar.gz
-sudo mv git-workflow /usr/local/bin/
-```
-
-### Windows
-
-Extract `git-workflow-windows-amd64.zip` and move `git-workflow.exe` to a
-directory listed in your `PATH` environment variable (for example
-`C:\Users\<you>\.cargo\bin\`).
+For platform-specific download and extraction steps, see
+[platform-setup.md](platform-setup.md).
 
 ## Verify the installation
 
@@ -72,4 +65,5 @@ git pull
 cargo install --path .
 ```
 
-Or download the newest release binary from the Releases page.
+Or download the newest release binary from the
+[Releases](https://github.com/nimonht/Simple-Rust-cli-wrapper/releases) page.

@@ -60,7 +60,57 @@ git-workflow start fix/null-pointer-crash
 git-workflow finish "Fix null pointer crash on startup"
 ```
 
-## 4. Handling errors
+## 4. Dumping patches from a branch
+
+You are working on a kernel subsystem and need to export your commits as patch
+files for mailing list review:
+
+```bash
+git-workflow dump --branch feature/driver-update --format patch --output ./patches
+```
+
+This creates one `.patch` file per commit in the `./patches` directory, ready
+for `git am` or mailing list submission.
+
+To dump as unified diff files instead:
+
+```bash
+git-workflow dump --branch feature/driver-update --format diff --output ./diffs
+```
+
+To dump a single commit:
+
+```bash
+git-workflow dump --commit abc1234 --format patch --output ./patches
+```
+
+To dump all commits on the current branch:
+
+```bash
+git-workflow dump --all --format patch --output ./patches
+```
+
+## 5. Sending patches via email
+
+Export and email patches to a maintainer in one step:
+
+```bash
+git-workflow dump --branch feature/driver-update --format patch --email maintainer@example.com
+```
+
+## 6. Using the interactive TUI
+
+Launch the terminal UI for an interactive menu-driven interface:
+
+```bash
+git-workflow tui
+```
+
+The TUI uses a lazydocker-style layout and respects your terminal's color theme.
+Use keyboard navigation to select commands (Start Branch, Finish PR, Dump
+Commits), fill in parameters, and execute actions.
+
+## 7. Handling errors
 
 If there are no changes to commit, the `finish` command reports the error
 clearly:
