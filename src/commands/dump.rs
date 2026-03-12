@@ -7,7 +7,7 @@ use crate::git::{detect_default_branch, run_git};
 pub fn cmd_dump(
     branch: Option<&str>,
     commit: Option<&str>,
-    _all: bool,
+    all: bool,
     format: &str,
     output: &str,
     email: Option<&str>,
@@ -36,8 +36,12 @@ pub fn cmd_dump(
 
     if let Some(sha) = commit {
         dump_specific_commit(sha, format, output)?;
-    } else {
+    } else if all {
         dump_all_commits(&target_branch, format, output)?;
+    } else {
+        return Err(anyhow::anyhow!(
+            "Specify --commit <SHA> to dump a single commit, or --all to dump all branch commits."
+        ));
     }
 
     if let Some(addr) = email {
