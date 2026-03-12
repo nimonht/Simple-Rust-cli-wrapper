@@ -1,21 +1,17 @@
 use anyhow::{Context, Result};
 use colored::Colorize;
 
-use crate::git::run_git;
+use crate::git::{detect_default_branch, run_git};
 
+/// Sync the default branch (master or main) and create a new feature branch.
 pub fn cmd_start(branch_name: &str) -> Result<()> {
     println!("{}", "Syncing default branch...".cyan());
 
-    run_git(&["checkout", "master"])
-        .or_else(|err| {
-            let msg = err.to_string();
-            if msg.contains("did not match any file") || msg.contains("unknown revision or path") {
-                run_git(&["checkout", "main"])
-            } else {
-                Err(err)
-            }
-        })
-        .context("Failed to switch to default branch (master/main)")?;
+    let default_branch =
+        detect_default_branch().context("Failed to detect default branch (master/main)")?;
+
+    run_git(&["checkout", &default_branch])
+        .with_context(|| format!("Failed to switch to default branch '{default_branch}'"))?;
 
     run_git(&["pull"]).context("Failed to pull latest changes")?;
 

@@ -29,15 +29,27 @@ pub fn run_gh(args: &[&str]) -> Result<String> {
     }
 }
 
-/// Detect whether the default branch is "master" or "main".
+/// Detect whether the default branch is "main" or "master".
+///
+/// First checks the remote HEAD (most reliable), then falls back to
+/// checking local branches with "main" preferred over "master".
 pub fn detect_default_branch() -> Result<String> {
-    if run_git(&["rev-parse", "--verify", "master"]).is_ok() {
-        Ok("master".to_string())
-    } else if run_git(&["rev-parse", "--verify", "main"]).is_ok() {
+    // First try to detect from the remote HEAD (most reliable)
+    if let Ok(remote_head) = run_git(&["symbolic-ref", "refs/remotes/origin/HEAD"]) {
+        // Output looks like "refs/remotes/origin/main"
+        if let Some(branch) = remote_head.strip_prefix("refs/remotes/origin/") {
+            return Ok(branch.to_string());
+        }
+    }
+
+    // Fall back to checking local branches
+    if run_git(&["rev-parse", "--verify", "main"]).is_ok() {
         Ok("main".to_string())
+    } else if run_git(&["rev-parse", "--verify", "master"]).is_ok() {
+        Ok("master".to_string())
     } else {
         Err(anyhow::anyhow!(
-            "Could not detect default branch (tried 'master' and 'main')"
+            "Could not detect default branch (tried 'main' and 'master')"
         ))
     }
 }

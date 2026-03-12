@@ -49,6 +49,8 @@ git-workflow tui
   macOS, Windows, and BSD
 - [Use case examples](docs/use-cases.md) -- common workflows illustrated
 - [Code rules](.github/code-rules.md) -- coding conventions for contributors
+- [Contributing guide](CONTRIBUTING.md) -- how to contribute to the project
+- [Code of Conduct](CODE_OF_CONDUCT.md) -- community standards and expectations
 
 ## Development
 
@@ -68,12 +70,19 @@ cargo fmt --all      # format
   pushed, builds release archives for all platforms and creates a GitHub Release
   with the artifacts attached.
 
-To cut a release:
+To cut a release, use the version bump script to update all version strings
+across the project in one step:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+./scripts/set-version.sh 0.3.0
+cargo test && cargo clippy -- -D warnings
+git add -A && git commit -m "Bump version to 0.3.0"
+git tag v0.3.0
+git push origin v0.3.0
 ```
+
+Never edit version strings by hand -- the script updates `Cargo.toml`,
+`Cargo.lock`, all packaging files, and documentation automatically.
 
 ## License
 

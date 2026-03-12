@@ -31,6 +31,10 @@ src/git.rs             -- Git helper functions (shell-outs to git/gh)
 src/commands/*.rs       -- subcommand implementations (start, finish, dump)
 src/tui/*.rs            -- TUI module (interactive terminal UI)
 docs/                  -- additional documentation (installation, use cases)
+packaging/aur/         -- Arch Linux AUR PKGBUILD
+packaging/gentoo/      -- Gentoo ebuild and metadata
+packaging/nix/         -- Nix flake and default.nix derivation
+scripts/set-version.sh -- version bump helper (updates all files)
 .github/workflows/     -- CI and release pipelines
 .github/code-rules.md  -- coding conventions
 ```
@@ -55,3 +59,18 @@ docs/                  -- additional documentation (installation, use cases)
 
 The CLI shells out to `git` and `gh` (GitHub CLI). Both must be installed and
 configured on the user's machine.
+
+## Releasing
+
+The version is defined once in `Cargo.toml`. A helper script propagates it to
+every file that contains a hardcoded version string (packaging files, docs,
+lockfile, Gentoo ebuild filename):
+
+```bash
+./scripts/set-version.sh 0.3.0   # bump to 0.3.0
+cargo test && cargo clippy -- -D warnings
+git add -A && git commit -m "Bump version to 0.3.0"
+git tag v0.3.0 && git push origin v0.3.0
+```
+
+Never edit version strings by hand -- always use the script.

@@ -1,0 +1,14 @@
+pkgbase = git-workflow
+	pkgdesc = A CLI tool that automates Git workflows
+	pkgver = 0.2.0
+	pkgrel = 1
+	url = https://github.com/nimonht/Simple-Rust-cli-wrapper
+	arch = x86_64
+	license = BSD-2-Clause
+	makedepends = rust
+	depends = git
+	depends = github-cli
+	source = git-workflow-0.2.0.tar.gz::https://github.com/nimonht/Simple-Rust-cli-wrapper/archive/v0.2.0.tar.gz
+	sha256sums = SKIP
+
+pkgname = git-workflow
