@@ -112,7 +112,8 @@ fn cmd_finish(pr_title: &str) -> Result<()> {
     if branch.is_empty() || branch == "HEAD" {
         return Err(anyhow::anyhow!(
             "Cannot determine a valid current branch (got '{}'). \
-You may be in a detached HEAD state. Please checkout a branch and rerun this command.",
+             You may be in a detached HEAD state. \
+             Please checkout a branch and rerun this command.",
             branch
         ));
     }

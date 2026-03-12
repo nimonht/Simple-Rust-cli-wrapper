@@ -72,17 +72,20 @@ cargo install --path .
 gh auth login
 ```
 
-### From release binary
+### From release binary (Intel Mac)
 
 ```bash
-# Intel Mac
 curl -LO https://github.com/nimonht/Simple-Rust-cli-wrapper/releases/latest/download/git-workflow-macos-amd64.tar.gz
 tar xzf git-workflow-macos-amd64.tar.gz
+sudo mv git-workflow /usr/local/bin/
+git-workflow --version
+```
 
-# Apple Silicon
+### From release binary (Apple Silicon)
+
+```bash
 curl -LO https://github.com/nimonht/Simple-Rust-cli-wrapper/releases/latest/download/git-workflow-macos-arm64.tar.gz
 tar xzf git-workflow-macos-arm64.tar.gz
-
 sudo mv git-workflow /usr/local/bin/
 git-workflow --version
 ```

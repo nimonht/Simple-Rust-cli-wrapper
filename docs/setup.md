@@ -31,7 +31,11 @@ extract it, and move the binary to a directory in your `PATH`.
 ### Linux / macOS
 
 ```bash
-tar xzf git-workflow-linux-amd64.tar.gz   # or the macOS variant
+# Intel Mac:
+tar xzf git-workflow-linux-amd64.tar.gz
+# macOS (see docs/platform-setup.md for Intel vs Apple Silicon):
+# tar xzf git-workflow-macos-amd64.tar.gz
+# tar xzf git-workflow-macos-arm64.tar.gz
 sudo mv git-workflow /usr/local/bin/
 ```
 
