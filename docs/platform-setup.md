@@ -33,7 +33,7 @@ git-workflow --version
 ### Package manager installation
 
 > [!WARNING]
-> **ANVAILABILITY**
+> **AVAILABILITY**
 > We do not yet have official packages published to Linux distribution repositories. The packaging files in this directory are community-maintained and may be out of date. Use at your own risk.
 
 Community-maintained packaging files are provided in the `packaging/` directory

@@ -10,7 +10,7 @@ license=('BSD-2-Clause')
 depends=('git' 'github-cli')
 makedepends=('rust')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('SKIP') # TODO: Replace with actual checksum for release tarball
 
 prepare() {
     cd "Simple-Rust-cli-wrapper-${pkgver}"

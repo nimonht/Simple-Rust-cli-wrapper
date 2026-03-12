@@ -7,14 +7,14 @@ A Rust CLI tool that automates Git workflows.
 | Command | Description |
 |---------|-------------|
 | `git-workflow start <branch-name>` | Sync the default branch and create a new feature branch |
-| `git-workflow finish <pr-title>` | Stages changes, commits, pushes to the remote repository, and opens a Pull Request. **Important: This may not work and throw an error if you are not using SSH for your Git remote. Please ensure the remote origin is set up with SSH and that an SSH key is configured (Git deprecated password authentication in 2021).** |
+| `git-workflow finish <pr-title>` | Stages changes, commits, pushes to the remote repository, and opens a Pull Request. **Important: This requires that you are authenticated to push to the remote repository (via SSH or HTTPS) and that GitHub CLI (`gh`) is installed and logged in.** |
 | `git-workflow dump [OPTIONS]` | Dump commits from a branch to patch or diff files |
 | `git-workflow tui` | Launch interactive TUI mode |
 
 
 > [!WARNING]
 > **EXPERIMENTAL SOFTWARE**
-> This scheduler is experimental and intended for use with no guarantees. It may contain bugs and is not recommended for production use. Use at your own risk.
+> This CLI is experimental and intended for use with no guarantees. It may contain bugs and is not recommended for production use. Use at your own risk.
 
 > [!NOTE]
 > **AI TRANSPARENCY**

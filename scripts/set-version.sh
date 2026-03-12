@@ -96,11 +96,11 @@ ok "Cargo.toml"
 # -- 2. Cargo.lock (regenerate) -----------------------------------------------
 
 info "Regenerating Cargo.lock ..."
-(cd "$PROJECT_ROOT" && cargo generate-lockfile --quiet 2>/dev/null) || {
-    info "cargo generate-lockfile failed; trying cargo check instead ..."
-    (cd "$PROJECT_ROOT" && cargo check --quiet 2>/dev/null) || true
-}
-ok "Cargo.lock"
+if (cd "$PROJECT_ROOT" && cargo generate-lockfile --quiet); then
+    ok "Cargo.lock"
+else
+    die "Failed to regenerate Cargo.lock"
+fi
 
 # -- 3. AUR PKGBUILD ----------------------------------------------------------
 

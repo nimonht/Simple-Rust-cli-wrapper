@@ -29,10 +29,11 @@ pub fn run_gh(args: &[&str]) -> Result<String> {
     }
 }
 
-/// Detect whether the default branch is "main" or "master".
+/// Detect the repository's default branch.
 ///
-/// First checks the remote HEAD (most reliable), then falls back to
-/// checking local branches with "main" preferred over "master".
+/// First checks the remote HEAD via `origin/HEAD` (most reliable), which
+/// may return any branch name (e.g. "main", "master", "trunk", "develop").
+/// Falls back to checking local branches with "main" preferred over "master".
 pub fn detect_default_branch() -> Result<String> {
     // First try to detect from the remote HEAD (most reliable)
     if let Ok(remote_head) = run_git(&["symbolic-ref", "refs/remotes/origin/HEAD"]) {
