@@ -28,8 +28,12 @@ impl Drop for TerminalGuard {
 /// Run the interactive TUI.
 pub fn run_tui() -> Result<()> {
     enable_raw_mode()?;
-    execute!(stdout(), EnterAlternateScreen)?;
     let _guard = TerminalGuard;
+    execute!(
+        stdout(),
+        EnterAlternateScreen,
+        crossterm::terminal::Clear(crossterm::terminal::ClearType::All)
+    )?;
 
     let backend = CrosstermBackend::new(stdout());
     let mut terminal = Terminal::new(backend)?;
@@ -40,6 +44,10 @@ pub fn run_tui() -> Result<()> {
 
 fn main_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &mut App) -> Result<()> {
     loop {
+        if app.needs_clear {
+            terminal.clear()?;
+            app.needs_clear = false;
+        }
         terminal.draw(|frame| draw_ui(frame, app))?;
 
         if let Event::Key(key) = event::read()? {
@@ -212,18 +220,29 @@ fn handle_result(key: KeyCode, app: &mut App) {
 // These suspend the TUI (leave raw mode and alternate screen) so command
 // functions can print freely, then re-enter the TUI after completion.
 
-fn suspend_tui() {
-    let _ = disable_raw_mode();
-    let _ = execute!(stdout(), LeaveAlternateScreen);
+fn suspend_tui() -> Result<()> {
+    disable_raw_mode()?;
+    execute!(stdout(), LeaveAlternateScreen)?;
+    Ok(())
 }
 
-fn resume_tui() {
-    let _ = enable_raw_mode();
-    let _ = execute!(stdout(), EnterAlternateScreen);
+fn resume_tui(app: &mut App) -> Result<()> {
+    enable_raw_mode()?;
+    execute!(
+        stdout(),
+        EnterAlternateScreen,
+        crossterm::terminal::Clear(crossterm::terminal::ClearType::All)
+    )?;
+    app.needs_clear = true;
+    Ok(())
 }
 
 fn execute_start(app: &mut App, branch: &str) {
-    suspend_tui();
+    if let Err(e) = suspend_tui() {
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        return;
+    }
     match commands::cmd_start(branch) {
         Ok(()) => {
             app.output_log
@@ -233,11 +252,18 @@ fn execute_start(app: &mut App, branch: &str) {
             app.output_log.push(format!("[ERROR] {:#}", e));
         }
     }
-    resume_tui();
+    if let Err(e) = resume_tui(app) {
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+    }
 }
 
 fn execute_finish(app: &mut App, title: &str) {
-    suspend_tui();
+    if let Err(e) = suspend_tui() {
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        return;
+    }
     match commands::cmd_finish(title) {
         Ok(()) => {
             app.output_log
@@ -247,7 +273,10 @@ fn execute_finish(app: &mut App, title: &str) {
             app.output_log.push(format!("[ERROR] {:#}", e));
         }
     }
-    resume_tui();
+    if let Err(e) = resume_tui(app) {
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+    }
 }
 
 fn execute_dump(app: &mut App) {
@@ -273,7 +302,11 @@ fn execute_dump(app: &mut App) {
         Some(app.dump_email.as_str())
     };
 
-    suspend_tui();
+    if let Err(e) = suspend_tui() {
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        return;
+    }
     match commands::cmd_dump(branch, commit, app.dump_all, format, output, email) {
         Ok(()) => {
             app.output_log.push("[OK] Dump completed.".to_string());
@@ -282,5 +315,8 @@ fn execute_dump(app: &mut App) {
             app.output_log.push(format!("[ERROR] {:#}", e));
         }
     }
-    resume_tui();
+    if let Err(e) = resume_tui(app) {
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+    }
 }

@@ -52,6 +52,7 @@ pub struct App {
     pub input: String,
     pub output_log: Vec<String>,
     pub should_quit: bool,
+    pub needs_clear: bool,
 
     // Dump configuration
     pub dump_branch: String,
@@ -71,6 +72,7 @@ impl App {
             input: String::new(),
             output_log: vec!["Ready. Select an action to get started.".to_string()],
             should_quit: false,
+            needs_clear: true,
             dump_branch: String::new(),
             dump_commit: String::new(),
             dump_all: false,
