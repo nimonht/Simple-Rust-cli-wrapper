@@ -10,7 +10,7 @@ license=('BSD-2-Clause')
 depends=('git' 'github-cli')
 makedepends=('rust')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('d41c6f035f56a1cc61031fb872eb52fabed191ab3c79c746c63ff61dd7288d34')
 
 prepare() {
     cd "Simple-Rust-cli-wrapper-${pkgver}"

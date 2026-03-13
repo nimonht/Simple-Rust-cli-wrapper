@@ -9,6 +9,6 @@ pkgbase = git-workflow
 	depends = git
 	depends = github-cli
 	source = git-workflow-1.0.1.tar.gz::https://github.com/nimonht/Simple-Rust-cli-wrapper/archive/v1.0.1.tar.gz
-	sha256sums = SKIP
+	sha256sums = d41c6f035f56a1cc61031fb872eb52fabed191ab3c79c746c63ff61dd7288d34
 
 pkgname = git-workflow
