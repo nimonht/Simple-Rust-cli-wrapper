@@ -69,6 +69,30 @@ sudo apt update && sudo apt install -y git
 
 Build from source or use the release binary (see above).
 
+#### Install git-workflow (.deb package)
+
+A build script is provided in `packaging/deb/` that produces a `.deb` package
+for proper package tracking through `dpkg` / `apt`:
+
+```bash
+# Install build dependencies
+sudo apt install -y cargo rustc dpkg-dev
+
+# Clone and build
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper
+./packaging/deb/build-deb.sh --install
+```
+
+The `--install` flag runs `sudo dpkg -i` automatically after building. Without
+it, the `.deb` file is placed in `target/`.
+
+To uninstall:
+
+```bash
+sudo apt remove git-workflow
+```
+
 ---
 
 ### Fedora / RHEL / CentOS Stream
@@ -90,6 +114,30 @@ sudo dnf install -y gh
 #### Install git-workflow
 
 Build from source or use the release binary (see above).
+
+#### Install git-workflow (RPM package)
+
+An RPM spec file and build script are provided in `packaging/rpm/` for proper
+package tracking through `dnf` / `rpm`:
+
+```bash
+# Install build dependencies
+sudo dnf install -y rust cargo rpm-build
+
+# Clone and build
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper
+./packaging/rpm/build-rpm.sh --local --install
+```
+
+The `--local` flag builds from the local source tree instead of downloading a
+release tarball. The `--install` flag runs `sudo rpm -i` after building.
+
+To uninstall:
+
+```bash
+sudo dnf remove git-workflow
+```
 
 ---
 
@@ -124,6 +172,12 @@ paru -S git-workflow
 git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
 cd Simple-Rust-cli-wrapper/packaging/aur
 makepkg -si
+```
+
+To uninstall:
+
+```bash
+sudo pacman -R git-workflow
 ```
 
 ---
@@ -251,17 +305,25 @@ sh <(curl -L https://nixos.org/nix/install) --daemon
 A Nix flake is provided in `packaging/nix/`:
 
 ```bash
+# Build from a local clone (recommended -- no hash computation needed)
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper
+nix build
+./result/bin/git-workflow --version
+
+# Install to your profile from a local clone
+nix profile install .
+```
+
+If the package hashes are published in a release, you can also install
+directly from GitHub:
+
+```bash
 # Run directly without installing
 nix run github:nimonht/Simple-Rust-cli-wrapper
 
 # Install to your profile
 nix profile install github:nimonht/Simple-Rust-cli-wrapper
-
-# Or build locally from the packaging directory
-git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
-cd Simple-Rust-cli-wrapper/packaging/nix
-nix build
-./result/bin/git-workflow --version
 ```
 
 For non-flake users, a `default.nix` is also provided:

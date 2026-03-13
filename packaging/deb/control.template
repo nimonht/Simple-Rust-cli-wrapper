@@ -1,0 +1,19 @@
+Package: git-workflow
+Version: @@VERSION@@
+Section: vcs
+Priority: optional
+Architecture: @@ARCH@@
+Depends: git, gh
+Build-Depends: cargo, rustc
+Maintainer: nimonht <nimonht@users.noreply.github.com>
+Homepage: https://github.com/nimonht/Simple-Rust-cli-wrapper
+Description: A CLI tool that automates Git workflows
+ git-workflow provides subcommands to streamline common Git operations
+ including branch creation, pull request submission, patch generation,
+ and an interactive TUI mode.
+ .
+ Subcommands:
+   start  - sync default branch and create a feature branch
+   finish - stage, commit, push, and open a Pull Request via gh
+   dump   - dump commits to patch or diff files
+   tui    - launch interactive terminal UI

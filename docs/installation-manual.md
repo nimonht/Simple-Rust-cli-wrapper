@@ -48,6 +48,55 @@ Community-maintained packaging files are provided in the `packaging/` directory
 for several Linux distributions. These are not yet published to official
 repositories -- you can build and install locally from the packaging files.
 
+### Debian / Ubuntu (.deb)
+
+A build script is provided in `packaging/deb/` that produces a `.deb` package
+you can install with `dpkg`. This gives you proper package tracking so you can
+remove it cleanly later with `apt remove git-workflow`.
+
+```bash
+# Prerequisites
+sudo apt update && sudo apt install -y git cargo rustc dpkg-dev
+
+# Clone and build the .deb
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper
+./packaging/deb/build-deb.sh --install
+```
+
+The `--install` flag runs `sudo dpkg -i` automatically after building. Without
+it the script only produces the `.deb` file in `target/`.
+
+To uninstall:
+
+```bash
+sudo apt remove git-workflow
+```
+
+### Fedora / RHEL / CentOS Stream (RPM)
+
+An RPM spec file and build script are provided in `packaging/rpm/`. Building a
+proper RPM lets your system track the package through `dnf` / `rpm`.
+
+```bash
+# Prerequisites
+sudo dnf install -y git rust cargo rpm-build
+
+# Clone and build the RPM
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper
+./packaging/rpm/build-rpm.sh --local --install
+```
+
+The `--local` flag builds from the local source tree instead of downloading a
+release tarball. The `--install` flag runs `sudo rpm -i` after building.
+
+To uninstall:
+
+```bash
+sudo dnf remove git-workflow
+```
+
 ### Arch Linux (AUR)
 
 A PKGBUILD is provided in `packaging/aur/`. Install with an AUR helper or
@@ -66,6 +115,12 @@ cd Simple-Rust-cli-wrapper/packaging/aur
 makepkg -si
 ```
 
+To uninstall:
+
+```bash
+sudo pacman -R git-workflow
+```
+
 ### Gentoo (ebuild)
 
 An ebuild is provided in `packaging/gentoo/`. See
@@ -74,7 +129,23 @@ local overlay and installing via `emerge`.
 
 ### NixOS / Nix (flake)
 
-A Nix flake is provided in `packaging/nix/`:
+A Nix flake is provided in `packaging/nix/`. For local builds from a cloned
+repo, the flake uses the local source tree directly (no hash computation
+needed):
+
+```bash
+# Build from a local clone
+git clone https://github.com/nimonht/Simple-Rust-cli-wrapper.git
+cd Simple-Rust-cli-wrapper/packaging/nix
+nix build
+
+# Or install to your profile from a local clone
+cd Simple-Rust-cli-wrapper
+nix profile install .
+```
+
+If the package is published to GitHub with proper hashes, you can also run or
+install directly from the remote:
 
 ```bash
 # Run directly without installing

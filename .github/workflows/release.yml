@@ -69,6 +69,40 @@ jobs:
         with:
           path: artifacts
 
+      - name: Generate SHA256 checksums for release archives
+        run: |
+          echo "[INFO] Generating SHA256 checksums for release archives ..."
+          cd artifacts
+          : > ../SHA256SUMS
+          for dir in */; do
+            for file in "${dir}"*; do
+              if [ -f "$file" ]; then
+                basename="$(basename "$file")"
+                sha256sum "$file" | sed "s|${file}|${basename}|" >> ../SHA256SUMS
+              fi
+            done
+          done
+          cd ..
+          echo "[OK] SHA256SUMS:"
+          cat SHA256SUMS
+          cp SHA256SUMS artifacts/SHA256SUMS
+
+      - name: Generate source tarball checksum
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+          echo "[INFO] Downloading source tarball for ${tag} ..."
+          curl -fSL -o "/tmp/source-${tag}.tar.gz" \
+            "https://github.com/${{ github.repository }}/archive/${tag}.tar.gz"
+          echo "[INFO] Computing SHA256 for source tarball ..."
+          src_sha256="$(sha256sum "/tmp/source-${tag}.tar.gz" | awk '{print $1}')"
+          echo "[OK] Source tarball SHA256: ${src_sha256}"
+          echo ""
+          echo "source_sha256=${src_sha256}" >> "$GITHUB_ENV"
+          echo "" >> artifacts/SHA256SUMS
+          echo "# Source tarball" >> artifacts/SHA256SUMS
+          echo "${src_sha256}  ${tag}.tar.gz" >> artifacts/SHA256SUMS
+
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
