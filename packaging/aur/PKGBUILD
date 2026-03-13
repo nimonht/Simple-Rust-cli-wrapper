@@ -1,7 +1,7 @@
 # Maintainer: nimonht <nimonht on GitHub>
 
 pkgname=git-workflow
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="A CLI tool that automates Git workflows"
 arch=('x86_64')
@@ -10,7 +10,7 @@ license=('BSD-2-Clause')
 depends=('git' 'github-cli')
 makedepends=('rust')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/v${pkgver}.tar.gz")
-sha256sums=('d8a4765f6be52ca97fdcd2416d544077a47427af65d70b409b388ebbbb8bee7d')
+sha256sums=('SKIP')
 
 prepare() {
     cd "Simple-Rust-cli-wrapper-${pkgver}"

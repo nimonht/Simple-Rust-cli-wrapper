@@ -56,7 +56,6 @@ git-workflow tui
   installation, and authentication
 - [Platform setup tutorial](docs/platform-setup.md) -- step-by-step for Linux,
   macOS, Windows, and BSD
-- [Use case examples](docs/use-cases.md) -- common workflows illustrated
 - [Code rules](.github/code-rules.md) -- coding conventions for contributors
 - [Contributing guide](CONTRIBUTING.md) -- how to contribute to the project
 - [Code of Conduct](CODE_OF_CONDUCT.md) -- community standards and expectations

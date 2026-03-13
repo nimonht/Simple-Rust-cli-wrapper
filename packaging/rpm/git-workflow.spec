@@ -9,10 +9,10 @@
 # Upstream version may contain hyphens (e.g. 1.0.0-rc1) which RPM does not
 # allow in Version.  The tilde form (1.0.0~rc1) is set in Version below.
 # upstream_version preserves the original for tarball URLs and directory names.
-%global upstream_version 1.0.0
+%global upstream_version 1.0.1
 
 Name:           git-workflow
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        A CLI tool that automates Git workflows
 
