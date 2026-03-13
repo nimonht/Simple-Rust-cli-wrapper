@@ -2,7 +2,7 @@
 
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "git-workflow";
-  version = "1.0.0-rc1";
+  version = "1.0.0";
 
   # To build from the local source tree instead of fetching from GitHub,
   # replace the src block below with:

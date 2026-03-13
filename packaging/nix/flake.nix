@@ -18,7 +18,7 @@
 
         git-workflow = pkgs.rustPlatform.buildRustPackage rec {
           pname = "git-workflow";
-          version = "1.0.0-rc1";
+          version = "1.0.0";
 
           # To build from a published release, use fetchFromGitHub:
           #
@@ -76,7 +76,7 @@
         # without waiting for a published release.
         git-workflow-local = pkgs.rustPlatform.buildRustPackage {
           pname = "git-workflow";
-          version = "1.0.0-rc1";
+          version = "1.0.0";
 
           src = self;
 
