@@ -239,7 +239,8 @@ fn resume_tui(app: &mut App) -> Result<()> {
 
 fn execute_start(app: &mut App, branch: &str) {
     if let Err(e) = suspend_tui() {
-        app.output_log.push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
         return;
     }
     match commands::cmd_start(branch) {
@@ -252,13 +253,15 @@ fn execute_start(app: &mut App, branch: &str) {
         }
     }
     if let Err(e) = resume_tui(app) {
-        app.output_log.push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
     }
 }
 
 fn execute_finish(app: &mut App, title: &str) {
     if let Err(e) = suspend_tui() {
-        app.output_log.push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
         return;
     }
     match commands::cmd_finish(title) {
@@ -271,7 +274,8 @@ fn execute_finish(app: &mut App, title: &str) {
         }
     }
     if let Err(e) = resume_tui(app) {
-        app.output_log.push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
     }
 }
 
@@ -299,7 +303,8 @@ fn execute_dump(app: &mut App) {
     };
 
     if let Err(e) = suspend_tui() {
-        app.output_log.push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to suspend TUI: {:#}", e));
         return;
     }
     match commands::cmd_dump(branch, commit, app.dump_all, format, output, email) {
@@ -311,6 +316,7 @@ fn execute_dump(app: &mut App) {
         }
     }
     if let Err(e) = resume_tui(app) {
-        app.output_log.push(format!("[ERROR] Failed to resume TUI: {:#}", e));
+        app.output_log
+            .push(format!("[ERROR] Failed to resume TUI: {:#}", e));
     }
 }
