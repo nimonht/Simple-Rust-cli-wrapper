@@ -28,7 +28,11 @@ impl Drop for TerminalGuard {
 /// Run the interactive TUI.
 pub fn run_tui() -> Result<()> {
     enable_raw_mode()?;
-    execute!(stdout(), EnterAlternateScreen)?;
+    execute!(
+        stdout(),
+        EnterAlternateScreen,
+        crossterm::terminal::Clear(crossterm::terminal::ClearType::All)
+    )?;
     let _guard = TerminalGuard;
 
     let backend = CrosstermBackend::new(stdout());
@@ -40,6 +44,7 @@ pub fn run_tui() -> Result<()> {
 
 fn main_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &mut App) -> Result<()> {
     loop {
+        terminal.clear()?;
         terminal.draw(|frame| draw_ui(frame, app))?;
 
         if let Event::Key(key) = event::read()? {
@@ -219,7 +224,11 @@ fn suspend_tui() {
 
 fn resume_tui() {
     let _ = enable_raw_mode();
-    let _ = execute!(stdout(), EnterAlternateScreen);
+    let _ = execute!(
+        stdout(),
+        EnterAlternateScreen,
+        crossterm::terminal::Clear(crossterm::terminal::ClearType::All)
+    );
 }
 
 fn execute_start(app: &mut App, branch: &str) {
