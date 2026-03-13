@@ -106,7 +106,6 @@ Launch the terminal UI for an interactive menu-driven interface:
 git-workflow tui
 ```
 
-The TUI uses a lazydocker-style layout and respects your terminal's color theme.
 Use keyboard navigation to select commands (Start Branch, Finish PR, Dump
 Commits), fill in parameters, and execute actions.
 

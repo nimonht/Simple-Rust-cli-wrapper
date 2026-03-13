@@ -66,10 +66,6 @@ fn draw_main(frame: &mut Frame, app: &App, area: Rect) {
 fn draw_welcome(frame: &mut Frame, area: Rect) {
     let text = vec![
         Line::from(""),
-        Line::from(Span::styled(
-            " git-workflow",
-            Style::default().add_modifier(Modifier::BOLD),
-        )),
         Line::from(""),
         Line::from(" A CLI tool that automates common Git workflows."),
         Line::from(""),

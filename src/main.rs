@@ -29,7 +29,7 @@ enum Commands {
         pr_title: String,
     },
     /// Dump commits from a branch to patch or diff files.
-    /// Useful for kernel development workflows where patches are
+    /// Useful for workflows where patches are
     /// submitted via email.
     Dump {
         /// Branch to dump commits from (defaults to current branch)
